@@ -8,6 +8,22 @@ type MarkovChain struct {
 	States map[string][]ru.Choice
 }
 
+func (mc *MarkovChain) AddStateChoice(key, state string, prob int) {
+	if _, ok := mc.States[key]; ok == false {
+		mc.States[key] = append(mc.States[key], ru.Choice{prob, state})
+	} else {
+		var desiredIndex int
+		ss := mc.States[key]
+		for i := 0; i < len(ss); i++ {
+			if ss[i].Item == state {
+				desiredIndex = i
+			}
+		}
+
+		mc.States[key][desiredIndex] = ru.Choice{prob, state}
+	}
+}
+
 func (mc *MarkovChain) Insert(key, state string) {
 	// check for key and add key and key and state if they both don't exist
 	if _, ok := mc.States[key]; ok == false {
