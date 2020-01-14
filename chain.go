@@ -69,12 +69,10 @@ func (mc *MarkovChain) PredictState(key string) (string, error) {
 		return "", fmt.Errorf("The weighted random selection failed.  Check and ensure your MarkovChain has no negative values and at least one non-zero value.")
 	}
 
+	// casting interface as a string to force the use of string
 	return c.Item.(string), nil
 }
 
 func NewChain() MarkovChain {
-	mc := MarkovChain{}
-	mc.States = make(map[string][]ru.Choice)
-
-	return mc
+	return MarkovChain{States: make(map[string][]ru.Choice)}
 }
