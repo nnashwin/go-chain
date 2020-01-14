@@ -1,28 +1,29 @@
-package chain
+package chain_test
 
 import (
 	ru "github.com/jmcvetta/randutil"
+	"github.com/ru-lai/go-chain"
 	"reflect"
 	"testing"
 )
-
-func TestNew(t *testing.T) {
-	expected := MarkovChain{}
-	expected.States = make(map[string][]ru.Choice)
-
-	actual := NewChain()
-	if reflect.DeepEqual(expected, actual) == false {
-		t.Error("The NewChain function did not correctly instantiate a MarkovChain")
-	}
-}
 
 type Args struct {
 	Key, State  string
 	Probability int
 }
 
+func TestNew(t *testing.T) {
+	expected := chain.MarkovChain{}
+	expected.States = make(map[string][]ru.Choice)
+
+	actual := chain.NewChain()
+	if reflect.DeepEqual(expected, actual) == false {
+		t.Error("The NewChain function did not correctly instantiate a MarkovChain")
+	}
+}
+
 func TestSetState(t *testing.T) {
-	mc := NewChain()
+	mc := chain.NewChain()
 	tests := []struct {
 		Args                 Args
 		ExpectedChoiceLength int
@@ -72,7 +73,7 @@ func TestSetState(t *testing.T) {
 }
 
 func TestIncrementState(t *testing.T) {
-	mc := NewChain()
+	mc := chain.NewChain()
 	tests := []struct {
 		Args     Args
 		Expected ru.Choice
@@ -114,7 +115,7 @@ func TestIncrementState(t *testing.T) {
 }
 
 func TestPredictState(t *testing.T) {
-	mc := NewChain()
+	mc := chain.NewChain()
 	mc.IncrementState("a", "b")
 	mc.IncrementState("a", "b")
 	mc.SetState("a", "c", 0)
@@ -132,7 +133,7 @@ func TestPredictState(t *testing.T) {
 }
 
 func TestPredictStateFailures(t *testing.T) {
-	mc := NewChain()
+	mc := chain.NewChain()
 	actual, err := mc.PredictState("a")
 	if err == nil {
 		t.Errorf("TestPredictState should fail when trying to predict an empty key.  Returned the following instead:\nActual: %s, Error: %s", actual, err)
@@ -151,5 +152,22 @@ func TestPredictStateFailures(t *testing.T) {
 	actual, err = mc.PredictState("a")
 	if err == nil {
 		t.Errorf("TestPredictState should fail when trying to predict a key that has a negative integer as a state.  Returned the following instead:\nActual: %s, Error: %s", actual, err)
+	}
+}
+
+func TestGenerateStates(t *testing.T) {
+	mc := chain.NewChain()
+	mc.IncrementState("a", "b")
+	mc.IncrementState("b", "c")
+	mc.IncrementState("c", "a")
+
+	e := []string{"b", "c", "a"}
+	a, err := mc.GenerateStates("a", 3)
+	if err != nil {
+		t.Errorf("TestGenerateStates threw the following unexpected error: %v", err)
+	}
+
+	if !reflect.DeepEqual(a, e) {
+		t.Errorf("TestGenerateStates returned the wrong values.\nexpected: %v, actual: %v", e, a)
 	}
 }

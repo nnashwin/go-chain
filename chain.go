@@ -73,6 +73,21 @@ func (mc *MarkovChain) PredictState(key string) (string, error) {
 	return c.Item.(string), nil
 }
 
+func (mc *MarkovChain) GenerateStates(key string, numStates int) ([]string, error) {
+	var ss []string
+	for i := 0; i < numStates; i++ {
+		ns, err := mc.PredictState(key)
+		if err != nil {
+			return ss, err
+		}
+
+		ss = append(ss, ns)
+		key = ns
+	}
+
+	return ss, nil
+}
+
 func NewChain() MarkovChain {
 	return MarkovChain{States: make(map[string][]ru.Choice)}
 }
