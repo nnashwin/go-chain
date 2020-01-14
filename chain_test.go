@@ -14,7 +14,7 @@ type Args struct {
 }
 
 func TestNew(t *testing.T) {
-	expected := chain.MarkovChain{}
+	expected := &chain.MarkovChain{}
 	expected.States = make(map[string][]ru.Choice)
 
 	actual := chain.NewChain()

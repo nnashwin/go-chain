@@ -89,6 +89,6 @@ func (mc *MarkovChain) GenerateStates(key string, numStates int) ([]string, erro
 	return ss, nil
 }
 
-func NewChain() MarkovChain {
-	return MarkovChain{States: make(map[string][]ru.Choice)}
+func NewChain() *MarkovChain {
+	return &MarkovChain{States: make(map[string][]ru.Choice)}
 }
