@@ -1,10 +1,11 @@
 package chain_test
 
 import (
-	ru "github.com/jmcvetta/randutil"
-	"github.com/ru-lai/go-chain"
 	"reflect"
 	"testing"
+
+	ru "github.com/jmcvetta/randutil"
+	"github.com/ru-lai/go-chain"
 )
 
 type Args struct {

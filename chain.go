@@ -2,6 +2,7 @@ package chain
 
 import (
 	"fmt"
+
 	ru "github.com/jmcvetta/randutil"
 )
 
@@ -74,7 +75,7 @@ func (mc *MarkovChain) PredictState(key string) (string, error) {
 }
 
 func (mc *MarkovChain) GenerateStates(key string, numStates int) ([]string, error) {
-	var ss []string
+	ss := make([]string, 0, numStates)
 	for i := 0; i < numStates; i++ {
 		ns, err := mc.PredictState(key)
 		if err != nil {
