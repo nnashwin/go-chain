@@ -1,0 +1,10 @@
+language: go
+
+go:
+    - go1.13
+
+before_install:
+    - go get
+
+script:
+    - go test -v .
